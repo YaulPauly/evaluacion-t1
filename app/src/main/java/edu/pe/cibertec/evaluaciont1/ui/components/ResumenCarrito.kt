@@ -4,17 +4,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import edu.pe.cibertec.evaluaciont1.viewmodel.CarritoViewModel
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun ResumenCarrito(
     viewModel: CarritoViewModel,
     onLimpiarCampos: () -> Unit = {},
-    onDeshabilitarResumen: () -> Unit = {}
+    onDeshabilitarResumen: () -> Unit = {},
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
 ) {
     Column {
         Text(
@@ -29,8 +33,8 @@ fun ResumenCarrito(
 
         AccionesResumenCarrito(
             viewModel = viewModel,
-            onLimpiarCampos = onLimpiarCampos,
-            onDeshabilitarResumen = onDeshabilitarResumen
+            snackbarHostState = snackbarHostState,
+            coroutineScope = coroutineScope
         )
     }
 }

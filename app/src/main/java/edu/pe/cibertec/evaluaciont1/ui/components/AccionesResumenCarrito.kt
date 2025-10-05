@@ -6,49 +6,46 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import edu.pe.cibertec.evaluaciont1.viewmodel.CarritoViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun AccionesResumenCarrito(
     viewModel: CarritoViewModel,
+    snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
     onLimpiarCampos: () -> Unit = {},
     onDeshabilitarResumen: () -> Unit = {}
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     var mostrarDialogo by remember { mutableStateOf(false) }
 
-    // 🔹 Snackbar visible en esta sección
-    SnackbarHost(
-        hostState = snackbarHostState,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // 🔹 Diálogo de confirmación
     if (mostrarDialogo) {
-        DialogoConfirmacion(
-            visible = mostrarDialogo,
-            titulo = "Confirmar limpieza",
-            mensaje = "¿Está seguro de limpiar el carrito?",
-            textoConfirmar = "Sí, limpiar",
-            textoCancelar = "Cancelar",
-            onConfirmar = {
-                mostrarDialogo = false
-                viewModel.limpiarCarrito()
-                onLimpiarCampos()
-                onDeshabilitarResumen()
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "Carrito limpiado correctamente",
-                        withDismissAction = true
-                    )
-                }
+        AlertDialog(
+            onDismissRequest = { mostrarDialogo = false },
+            title = { Text("Confirmar limpieza") },
+            text = { Text("¿Está seguro de limpiar el carrito?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    mostrarDialogo = false
+                    viewModel.limpiarCarrito()
+                    onLimpiarCampos()
+                    onDeshabilitarResumen()
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = "Carrito limpiado correctamente",
+                            withDismissAction = true
+                        )
+                    }
+                }) { Text("Sí, limpiar") }
             },
-            onCancelar = { mostrarDialogo = false }
+            dismissButton = {
+                TextButton(onClick = { mostrarDialogo = false }) {
+                    Text("Cancelar")
+                }
+            }
         )
     }
 
-    // 🔹 Botones de acción
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,7 +54,7 @@ fun AccionesResumenCarrito(
     ) {
         Button(
             onClick = { mostrarDialogo = true },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
         ) {
             Text("Limpiar")
         }
