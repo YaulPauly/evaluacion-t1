@@ -1,5 +1,6 @@
 package edu.pe.cibertec.evaluaciont1.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -32,11 +33,6 @@ class CarritoViewModel : ViewModel() {
         subtotal.value = 0.0
         descuento.value = 0.0
         total.value = 0.0
-
-        notificacion.value = Notificacion(
-            mensaje = "Carrito limpiado correctamente",
-            tipo = TipoNotificacion.EXITO
-        )
     }
 
     private fun calcularSubTotal() {
@@ -50,26 +46,33 @@ class CarritoViewModel : ViewModel() {
         descuento.value = subtotal.value * porcentaje
         total.value = subtotal.value - descuento.value
 
+        Log.d("CarritoViewModel", "Cantidad total: $cantidadTotal, Porcentaje: $porcentaje")
+
         notificacion.value = when (porcentaje) {
             0.0 -> Notificacion(
                 mensaje = "No hay descuento aplicado",
-                tipo = TipoNotificacion.INFO
+                tipo = TipoNotificacion.NEUTRO,
+                true
             )
-            0.10 -> Notificacion(
+            0.1 -> Notificacion(
                 mensaje = "¡Genial! Ahorraste S/. %.2f".format(descuento.value),
-                tipo = TipoNotificacion.EXITO // verde
+                tipo = TipoNotificacion.EXITO,
+                true
             )
             0.15 -> Notificacion(
                 mensaje = "¡Excelente! Ahorraste S/. %.2f".format(descuento.value),
-                tipo = TipoNotificacion.INFO // azul
+                tipo = TipoNotificacion.INFO,
+                true
             )
-            0.20 -> Notificacion(
+            0.2 -> Notificacion(
                 mensaje = "¡Increíble! Ahorraste S/. %.2f".format(descuento.value),
-                tipo = TipoNotificacion.ADVERTENCIA // dorado
+                tipo = TipoNotificacion.ADVERTENCIA,
+                true
             )
             else -> Notificacion(
                 mensaje = "Cálculo actualizado",
-                tipo = TipoNotificacion.INFO
+                tipo = TipoNotificacion.INFO,
+                true
             )
         }
     }
@@ -85,4 +88,9 @@ class CarritoViewModel : ViewModel() {
             else -> 0.20
         }
     }
+
+    fun ocultarNotificacion() {
+        notificacion.value = null
+    }
+
 }

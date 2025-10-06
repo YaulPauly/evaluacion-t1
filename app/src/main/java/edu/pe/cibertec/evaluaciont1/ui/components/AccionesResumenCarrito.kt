@@ -62,9 +62,6 @@ fun AccionesResumenCarrito(
         Button(
             onClick = {
                 viewModel.recalcularTotales()
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar("Cálculo actualizado")
-                }
             }
         ) {
             Text("Calcular")

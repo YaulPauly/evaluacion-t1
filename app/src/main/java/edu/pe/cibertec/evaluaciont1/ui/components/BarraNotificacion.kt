@@ -46,13 +46,13 @@ fun BarraNotificacion(
             Snackbar(
                 modifier = Modifier.padding(16.dp),
                 containerColor = obtenerColorNotificacion(notificacion?.tipo),
-                contentColor = Color.White,
+                contentColor = Color.Black,
                 action = {
                     IconButton(onClick = {data.dismiss()}) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Cerrar",
-                            tint = Color.White
+                            tint = Color.Black
                         )
                     }
                 }
@@ -64,7 +64,7 @@ fun BarraNotificacion(
                     Icon(
                         imageVector = obtenerIconoNotificacion(notificacion?.tipo),
                         contentDescription = null,
-                        tint = Color.White
+                        tint = Color.Black
                     )
                     Text(
                         text = data.visuals.message
@@ -90,11 +90,14 @@ private fun RowScope.obtenerIconoNotificacion(tipo: TipoNotificacion?): ImageVec
 
 @Composable
 fun obtenerColorNotificacion(tipo: TipoNotificacion?): Color {
-    return when (tipo){
+    val theme = MaterialTheme.colorScheme
+    return when (tipo) {
         TipoNotificacion.EXITO -> Color.Green
         TipoNotificacion.ERROR -> Color.Red
-        TipoNotificacion.INFO -> Color.Blue
         TipoNotificacion.ADVERTENCIA -> Color.Yellow
-        else -> Color.Green
+        TipoNotificacion.INFO -> Color.Blue
+        TipoNotificacion.NEUTRO -> theme.outlineVariant
+        else -> theme.outline
     }
 }
+

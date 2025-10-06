@@ -15,8 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun ResumenCarrito(
     viewModel: CarritoViewModel,
-    onLimpiarCampos: () -> Unit = {},
-    onDeshabilitarResumen: () -> Unit = {},
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope
 ) {
